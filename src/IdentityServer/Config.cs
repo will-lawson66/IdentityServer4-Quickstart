@@ -16,12 +16,31 @@ namespace IdentityServer
             };
 
         public static IEnumerable<ApiResource> Apis =>
-            new ApiResource[] 
-            { };
+            new ApiResource[]
+            {
+                new ApiResource("api1", "Development API"), 
+            };
         
         public static IEnumerable<Client> Clients =>
-            new Client[] 
-            { };
+            new Client[]
+            {
+                new Client
+                {
+                    ClientId = "Client",
+
+                    //using clientid/secret for authentication, since there is no actual interactive user
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    // scopes that client may access
+                    AllowedScopes =
+                    {
+                        "api1"
+                    }
+                }, 
+            };
         
     }
 }
