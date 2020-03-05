@@ -10,23 +10,23 @@ namespace IdentityServer
     public static class Config
     {
         public static IEnumerable<IdentityResource> Ids =>
-            new IdentityResource[]
+            new List<IdentityResource>
             { 
                 new IdentityResources.OpenId()
             };
 
         public static IEnumerable<ApiResource> Apis =>
-            new ApiResource[]
+            new List<ApiResource>
             {
                 new ApiResource("api1", "Development API"), 
             };
         
         public static IEnumerable<Client> Clients =>
-            new Client[]
+            new List<Client>
             {
                 new Client
                 {
-                    ClientId = "Client",
+                    ClientId = "client",
 
                     //using clientid/client secret for authentication, since there is no actual interactive user
                     ClientSecrets =
