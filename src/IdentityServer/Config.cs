@@ -28,7 +28,7 @@ namespace IdentityServer
                 {
                     ClientId = "Client",
 
-                    //using clientid/secret for authentication, since there is no actual interactive user
+                    //using clientid/client secret for authentication, since there is no actual interactive user
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())
