@@ -18,6 +18,7 @@ namespace Api
         {
             services.AddControllers();
 
+            // add authentication to DI container and configure "Bearer" as default scheme
             services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>
             {
                 options.Authority = "http://localhost:5000";
@@ -35,16 +36,20 @@ namespace Api
             }
 
             app.UseRouting();
-
+            
+            // add authentication middleware to pipeline - auth will be automatic
             app.UseAuthentication();
+
+            // add authorization middleware - no anonymous endpoint will be allowed
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
+                //endpoints.MapGet("/", async context =>
+                //{
+                //    await context.Response.WriteAsync("Hello World!");
+                //});
             });
         }
     }
