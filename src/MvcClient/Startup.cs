@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MvcClient
 {
@@ -24,6 +20,23 @@ namespace MvcClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            //1. add authentication middleware to the DI container and configure 
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultScheme = "Cookies";
+                    options.DefaultChallengeScheme = "oidc";
+                })
+                .AddCookie("Cookies")
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.Authority = "https://localhost:5001"; //the IdentityServer 
+                    options.ClientId = "mvc";
+                    options.ClientSecret = "secret";
+                    options.ResponseType = "code";
+                    options.SaveTokens = true;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,13 +57,12 @@ namespace MvcClient
 
             app.UseRouting();
 
+            app.UseAuthentication(); //executes auth services on each request
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute().RequireAuthorization(); //disables anonymous access for entire application
             });
         }
     }

@@ -45,17 +45,17 @@ namespace IdentityServer
             }
 
             // uncomment if you want to add MVC
-            app.UseStaticFiles();
-            app.UseRouting();
+            //app.UseStaticFiles();
+            //app.UseRouting();
 
             app.UseIdentityServer();
 
             // uncomment, if you want to add MVC
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            //app.UseAuthorization();
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapDefaultControllerRoute();
+            //});
         }
     }
 }
