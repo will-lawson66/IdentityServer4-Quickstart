@@ -25,6 +25,16 @@ namespace Api
                 options.RequireHttpsMetadata = false;
                 options.Audience = "api1";
             });
+
+            // add authorization - this will check for the presence of the scope in the access token the client requested
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "api1");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +55,9 @@ namespace Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                // enforce the authorization requirements, in this case, for all endpoints
+                endpoints.MapControllers().RequireAuthorization("ApiScope");
+
                 //endpoints.MapGet("/", async context =>
                 //{
                 //    await context.Response.WriteAsync("Hello World!");
