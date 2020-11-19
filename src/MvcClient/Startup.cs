@@ -31,7 +31,7 @@ namespace MvcClient
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "https://localhost:5001"; //the IdentityServer 
+                    options.Authority = "https://localhost:5000"; //the IdentityServer 
                     options.ClientId = "mvc";
                     options.ClientSecret = "secret";
                     options.ResponseType = "code";
@@ -63,6 +63,7 @@ namespace MvcClient
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute().RequireAuthorization(); //disables anonymous access for entire application
+                // if authorization is needed on a per-controller or per-action-method basis, use the [Authorize] attribute
             });
         }
     }

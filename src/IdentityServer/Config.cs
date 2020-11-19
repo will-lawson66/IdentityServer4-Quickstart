@@ -4,6 +4,7 @@
 
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using IdentityServer4;
 
 namespace IdentityServer
 {
@@ -12,7 +13,8 @@ namespace IdentityServer
         public static IEnumerable<IdentityResource> Ids =>
             new List<IdentityResource>
             { 
-                new IdentityResources.OpenId()
+                new IdentityResources.OpenId(), // this is a standard scope (subject id)
+                new IdentityResources.Profile(), // this is a standard scope (first name, last name, etc.)
             };
 
         public static IEnumerable<ApiResource> Apis =>
@@ -42,6 +44,26 @@ namespace IdentityServer
                         "api1"
                     }
                 }, 
+                new Client
+                {
+                    // these correspond to the client's Startup configuration
+                    ClientId = "mvc",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.Code,
+
+                    // where to redirect to after login
+                    RedirectUris = { "https://localhost:5002/signin-oidc" },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    }
+                }
             };
         
     }

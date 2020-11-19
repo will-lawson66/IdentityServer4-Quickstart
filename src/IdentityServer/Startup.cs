@@ -24,9 +24,10 @@ namespace IdentityServer
             services.AddControllersWithViews();
 
             var builder = services.AddIdentityServer()
-                .AddInMemoryIdentityResources(Config.Ids)
-                .AddInMemoryApiResources(Config.Apis)
-                .AddInMemoryClients(Config.Clients);
+                .AddInMemoryIdentityResources(Config.Ids) //these are our OpenId scopes
+                .AddInMemoryApiResources(Config.Apis) // this is the API scope
+                .AddInMemoryClients(Config.Clients)
+                .AddTestUsers(TestUsers.Users); // this some test data built in to the framework
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
